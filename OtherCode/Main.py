@@ -27,6 +27,7 @@ def addLayer(inputs, in_size, out_size, activationFunction=None,layerName='layer
             outputs = activationFunction(Wx_plus_b)
         tf.histogram_summary(layerName + '_outputs', outputs)
         return outputs
+
 def next_batch(feature_list,label_list,size):
     # 随机梯度下降
     feature_batch_temp=[]
@@ -37,6 +38,7 @@ def next_batch(feature_list,label_list,size):
     for i in f_list:
         label_batch_temp.append(label_list[i])
     return feature_batch_temp,label_batch_temp
+
 def main():
     global feature
     global label
@@ -104,6 +106,7 @@ def load_data():
             # print label
             # print feature
             # return 0
+
 if __name__  == '__main__':
     global feature
     global label
