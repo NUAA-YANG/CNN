@@ -31,7 +31,7 @@ class MyAlexNet(nn.Module):
         # 步长为4，即每次卷积核在水平和垂直方向上移动4个像素
         # 边缘像素为2，以便在卷积操作中保持输入和输出的尺寸相似
         # 计算公式：N = (输入大小-卷积核大小+2*填充值的大小)/步长大小 + 1
-        self.c1 = nn.Conv2d(in_channels=4, out_channels=32, kernel_size=3, padding=1)
+        self.c1 = nn.Conv2d(in_channels=3, out_channels=32, kernel_size=3, padding=1)
         # 第一个最大池化层，池化核为2，步长为2
         # 计算公式：H = (输入大小-卷积核大小)/步长大小 + 1
         self.s1 = nn.MaxPool2d(kernel_size=2, stride=1)
@@ -46,8 +46,8 @@ class MyAlexNet(nn.Module):
 
         # 全连接层，第一个参数表示样本的大小，第二个参数表示样本输出的维度大小
         self.f3 = nn.Linear(6400,512)
-        # softmax输出层，此时第二个参数代表了该全连接层的神经元个数(或者说分类个数)
-        self.f4 = nn.Linear(512, 2)
+        # softmax输出层，此时第二个参数代表了该全连接层的神经元个数(或者说分类个数)，此时需要实现5种分类
+        self.f4 = nn.Linear(512, 5)
 
 
     # forward()：定义前向传播过程,描述了各层之间的连接关系
@@ -81,7 +81,7 @@ class MyAlexNet(nn.Module):
 # if确保只有单独运行该模块时，此表达式才成立，才可以进入此判断语法，执行其中的测试代码，反之不行
 if __name__ == '__main__':
     # 图像文件路径
-    image_path = "C:/Users/29973/Desktop/论文/深度强化学习/论文复现/Image/1.png"
+    image_path = "C:/Users/29973/Desktop/论文/深度强化学习/论文复现/TrainImage/Dos/1.png"
     # 使用Pillow库加载图像
     image = Image.open(image_path)
     # 裁剪图像
@@ -96,3 +96,4 @@ if __name__ == '__main__':
     # 模型实例化
     model = MyAlexNet()
     y = model.forward(x)
+    print(y)
