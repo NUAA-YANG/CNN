@@ -11,7 +11,6 @@ from torch.optim import lr_scheduler
 from torchvision import transforms
 from torchvision.datasets import ImageFolder
 from torch.utils.data import DataLoader
-import os
 import matplotlib.pyplot as plt
 
 # 解决中文显示问题
@@ -22,7 +21,6 @@ plt.rcParams['axes.unicode_minus'] = False
 
 # 训练集和测试集的位置
 ROOT_TRAIN = "C:/Users/29973/Desktop/论文/深度强化学习/论文复现/TrainImage"
-#ROOT_TEST = 'D:/pycharm/AlexNet/data/val'
 
 
 # Compose()：将多个transforms的操作整合在一起
@@ -47,7 +45,7 @@ train_dataloader = DataLoader(train_dataset, batch_size=16, shuffle=True)
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 # 模型实例化，将模型转到device
-model = MyAlexNet().to(device)
+model = MyAlexNet(5).to(device)
 
 # 定义损失函数（交叉熵损失）
 loss_fn = nn.CrossEntropyLoss()
@@ -73,13 +71,13 @@ def train(dataloader, model, loss_fn, optimizer):
     # enumerate()：用于将一个可遍历的数据对象(如列表、元组或字符串)组合为一个索引序列，同时列出数据和数据下标，一般用在for循环当中
     # enumerate返回值有两个：一个是序号，一个是数据（包含训练数据和标签）
     # x：训练数据（inputs）(tensor类型的），y：标签（labels）(tensor类型）
-    for batch, (x, y) in enumerate(dataloader):
+    for batch, (image, label) in enumerate(dataloader):
         # 前向传播
-        image, y = x.to(device), y.to(device)
+        image, label = image.to(device), label.to(device)
         # 计算训练值
         output = model(image)
         # 计算观测值（label）与训练值的损失函数
-        cur_loss = loss_fn(output, y)
+        cur_loss = loss_fn(output, label)
         # torch.max(input, dim)函数
         # input是具体的tensor，dim是max函数索引的维度，0是每列的最大值，1是每行的最大值输出
         # 函数会返回两个tensor，第一个tensor是每行的最大值；第二个tensor是每行最大值的索引
@@ -87,7 +85,7 @@ def train(dataloader, model, loss_fn, optimizer):
         # 计算每批次的准确率
         # output.shape[0]为该批次的多少，output的一维长度
         # torch.sum()对输入的tensor数据的某一维度求和
-        cur_acc = torch.sum(y == pred) / output.shape[0]
+        cur_acc = torch.sum(label == pred) / output.shape[0]
 
         # 反向传播
         # 清空过往梯度

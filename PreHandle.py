@@ -15,9 +15,11 @@ from PIL import Image
 def oneHotHandle():
     print("==================开始数值化字符特征值================")
     # 源文件地址
-    sourceFile = 'DataSet/NSL-KDD/KDDTrain+.txt'
+    # sourceFile = 'DataSet/NSL-KDD/KDDTrain+.txt'   # 训练数据
+    sourceFile = 'DataSet/NSL-KDD/KDDTest+.txt'     # 测试数据
     # 处理完毕文件地址
-    handledFile = 'DataSet/NSL-KDD/KDDTrainHandled.cvs'
+    # handledFile = 'DataSet/NSL-KDD/KDDTrainHandled.cvs'    # 训练数据
+    handledFile = 'DataSet/NSL-KDD/KDDTestHandled.cvs'     # 测试数据
     # 分别记录每个特征的最大值和最小值
     minList = np.full(164,0)
     maxList = np.full(164, 0)
@@ -70,13 +72,21 @@ def oneHotHandle():
 # 最大最小值归一化处理
 def minMaxHandle(minList,maxList):
     print("==================开始归一化处理================")
-    handledFile = 'DataSet/NSL-KDD/KDDTrainHandled.cvs'
+    # handledFile = 'DataSet/NSL-KDD/KDDTrainHandled.cvs'   # 训练数据
+    handledFile = 'DataSet/NSL-KDD/KDDTestHandled.cvs'  # 测试数据
     # 处理完毕文件临时地址
-    normalFile = 'DataSet/Change/Train/Normal.cvs'
-    probeFile = 'DataSet/Change/Train/Probe.cvs'
-    dosFile = 'DataSet/Change/Train/Dos.cvs'
-    u2rFile = 'DataSet/Change/Train/U2R.cvs'
-    r2lFile = 'DataSet/Change/Train/R2L.cvs'
+    # ==================训练数据=======================
+    # normalFile = 'DataSet/Change/Train/Normal.cvs'
+    # probeFile = 'DataSet/Change/Train/Probe.cvs'
+    # dosFile = 'DataSet/Change/Train/Dos.cvs'
+    # u2rFile = 'DataSet/Change/Train/U2R.cvs'
+    # r2lFile = 'DataSet/Change/Train/R2L.cvs'
+    # ==================测试数据=======================
+    normalFile = 'DataSet/Change/Predict/Normal.cvs'
+    probeFile = 'DataSet/Change/Predict/Probe.cvs'
+    dosFile = 'DataSet/Change/Predict/Dos.cvs'
+    u2rFile = 'DataSet/Change/Predict/U2R.cvs'
+    r2lFile = 'DataSet/Change/Predict/R2L.cvs'
     with (open(handledFile,'r')) as data_from,\
             (open(normalFile, 'w',newline='')) as normalFlie, \
             (open(probeFile, 'w', newline='')) as probeFlie, \
@@ -116,9 +126,14 @@ def minMaxHandle(minList,maxList):
 # 读取CSV文件并将数据转化为图像
 def csvToImage():
     print("==================开始图像转化================")
-    fileNameList = ['DataSet/Change/Train/Normal.cvs','DataSet/Change/Train/Probe.cvs',
-                    'DataSet/Change/Train/Dos.cvs','DataSet/Change/Train/U2R.cvs',
-                    'DataSet/Change/Train/R2L.cvs']
+    # ==================训练数据=======================
+    # fileNameList = ['DataSet/Change/Train/Normal.cvs','DataSet/Change/Train/Probe.cvs',
+    #                 'DataSet/Change/Train/Dos.cvs','DataSet/Change/Train/U2R.cvs',
+    #                 'DataSet/Change/Train/R2L.cvs']
+    # ==================测试数据=======================
+    fileNameList = ['DataSet/Change/Predict/Normal.cvs','DataSet/Change/Predict/Probe.cvs',
+                    'DataSet/Change/Predict/Dos.cvs','DataSet/Change/Predict/U2R.cvs',
+                    'DataSet/Change/Predict/R2L.cvs']
     for handledFile in fileNameList:
         # 获取文件夹名称
         name = os.path.splitext(os.path.basename(handledFile))[0]
@@ -142,7 +157,10 @@ def csvToImage():
                 image = Image.fromarray(matrix * 255)
                 # 转换图像模式为RGBA
                 image = image.convert('RGBA')
-                image.save("C:/Users/29973/Desktop/论文/深度强化学习/论文复现/TrainImage/"+name+"/"+str(count)+".png",'PNG')
+                # 训练数据
+                # image.save("C:/Users/29973/Desktop/论文/深度强化学习/论文复现/TrainImage/"+ name +"/"+str(count)+".png",'PNG')
+                # 测试数据
+                image.save("C:/Users/29973/Desktop/论文/深度强化学习/论文复现/PredictImage/"+ name + "/" + str(count) + ".png",'PNG')
             print("===处理完毕 %s 的共 %s 张图片===" % (name, sumCount))
 
 
@@ -203,7 +221,7 @@ def handleLabel(input):
     u2r_list = ['buffer_overflow','httptunnel','loadmodule','perl','ps','rootkit','sqlattack','xterm']
 
     if input[41] in staut_list:
-        # 还需要进行归类处理
+        # 还需要进行五分类处理
         if input[41] == 'normal':
             return 'Normal',find_index(input[41],staut_list)
         else:
@@ -219,13 +237,6 @@ def handleLabel(input):
         staut_list.append(input[41])
         return 'None',find_index(input[41],staut_list)
 
-
-
-def test():
-    file = 'DataSet/Change/Train/Normal.cvs'
-    name = os.path.splitext(os.path.basename(file))[0]
-    result = "C:/Users/29973/Desktop/论文/深度强化学习/论文复现/TrainImage/" + name + "/" + str(1) + ".png"
-    print(result)
 
 # # 数值化字符型特征
 # minList,maxList = oneHotHandle()

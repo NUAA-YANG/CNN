@@ -20,7 +20,7 @@ import torch.nn.functional as F
 class MyAlexNet(nn.Module):
     # 子类继承中重新定义Module类的__init__()和forward()函数
     # init()：进行初始化，申明模型中各层的定义
-    def __init__(self):
+    def __init__(self,out):
         # super：引入父类的初始化方法给子类进行初始化
         super(MyAlexNet, self).__init__()
 
@@ -47,7 +47,7 @@ class MyAlexNet(nn.Module):
         # 全连接层，第一个参数表示样本的大小，第二个参数表示样本输出的维度大小
         self.f3 = nn.Linear(6400,512)
         # softmax输出层，此时第二个参数代表了该全连接层的神经元个数(或者说分类个数)，此时需要实现5种分类
-        self.f4 = nn.Linear(512, 5)
+        self.f4 = nn.Linear(512, out)
 
 
     # forward()：定义前向传播过程,描述了各层之间的连接关系
@@ -94,6 +94,6 @@ if __name__ == '__main__':
     image_tensor = torch.from_numpy(image_array).permute(2, 0, 1).unsqueeze(0)
     x = image_tensor.to(torch.float32)
     # 模型实例化
-    model = MyAlexNet()
+    model = MyAlexNet(5)
     y = model.forward(x)
     print(y)
