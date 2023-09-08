@@ -74,26 +74,3 @@ class MyAlexNet(nn.Module):
         imageTensor = self.f4(imageTensor)
         return imageTensor
 
-
-# 每个python模块（python文件）都包含内置的变量 __name__，当该模块被直接执行的时候，__name__ 等于文件名（包含后缀 .py ）
-# 如果该模块 import 到其他模块中，则该模块的 __name__ 等于模块名称（不包含后缀.py）
-# “__main__” 始终指当前执行模块的名称（包含后缀.py）
-# if确保只有单独运行该模块时，此表达式才成立，才可以进入此判断语法，执行其中的测试代码，反之不行
-if __name__ == '__main__':
-    # 图像文件路径
-    image_path = "C:/Users/29973/Desktop/论文/深度强化学习/论文复现/TrainImage/Dos/1.png"
-    # 使用Pillow库加载图像
-    image = Image.open(image_path)
-    # 裁剪图像
-    image = image.resize((12,12))
-    # 定义图像转换操作，将图像转化为张量
-    image_array = np.array(image)
-    # 这是对张量的维度进行重新排列的操作
-    # permute(2, 0, 1)表示将原始图像张量的维度从（高度，宽度，通道数）重新排列为（通道数，高度，宽度）
-    # unsqueeze(0)表示在张量的第0维度（批次维度）上添加一个维度，将图像张量转化为一个批次张量
-    image_tensor = torch.from_numpy(image_array).permute(2, 0, 1).unsqueeze(0)
-    x = image_tensor.to(torch.float32)
-    # 模型实例化
-    model = MyAlexNet(5)
-    y = model.forward(x)
-    print(y)

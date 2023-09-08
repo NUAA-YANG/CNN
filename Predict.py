@@ -104,9 +104,9 @@ def predictOneByOne():
                 succeed += 1
     for i in range(5):
         if preList[i] <= actList[i]:
-            print(f"{classes[i]}的预测准确率为：{str(preList[i] / actList[i])}")
+            print(f"{classes[i]}的预测精准率为：{str(preList[i] / actList[i])}")
         else:
-            print(f"{classes[i]}的预测准确率为：{str(actList[i] / preList[i])}")
+            print(f"{classes[i]}的预测精准率为：{str(actList[i] / preList[i])}")
     print(f"AlexNet-CNN模型综合预测准确率为：{str(succeed/lengthData)}")
 
 

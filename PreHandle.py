@@ -155,7 +155,7 @@ def csvToImage():
                 matrix = np.array(rowData).reshape(shape, shape)
                 # 构建图片
                 image = Image.fromarray(matrix * 255)
-                # 转换图像模式为RGBA
+                # 转换图像模式为RGB，如果报错就改为RGBA
                 image = image.convert('RGBA')
                 # 训练数据
                 # image.save("C:/Users/29973/Desktop/论文/深度强化学习/论文复现/TrainImage/"+ name +"/"+str(count)+".png",'PNG')
