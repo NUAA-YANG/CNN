@@ -238,10 +238,10 @@ def handleLabel(input):
         return 'None',find_index(input[41],staut_list)
 
 
-# # 数值化字符型特征
-# minList,maxList = oneHotHandle()
-# # 归一化处理
-# minMaxHandle(minList, maxList)
+# 数值化字符型特征
+minList,maxList = oneHotHandle()
+# 归一化处理
+minMaxHandle(minList, maxList)
 # 转化为张量，进而转化为图片
 csvToImage()
 

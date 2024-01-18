@@ -4,11 +4,6 @@
 @Python-Version ：3.8
 '''
 
-# 构建CNN模型
-from PIL import Image
-import numpy as np
-# 导入pytorch库
-import torch
 # 导入torch.nn模块
 from torch import nn
 # nn.functional：(一般引入后改名为F)有各种功能组件的函数实现，如：F.conv2d
@@ -28,15 +23,15 @@ class MyAlexNet(nn.Module):
         self.ReLU = nn.ReLU()
 
         # 第一个卷积层，输入通道为4(对应RGBA图像)，输出为32，卷积核为3
-        # 步长为4，即每次卷积核在水平和垂直方向上移动4个像素
-        # 边缘像素为2，以便在卷积操作中保持输入和输出的尺寸相似
-        # 计算公式：N = (输入大小-卷积核大小+2*填充值的大小)/步长大小 + 1
+        # 步长为1，即每次卷积核在水平和垂直方向上移动1个像素
+        # 边缘像素为1，以便在卷积操作中保持输入和输出的尺寸相似
+        # 计算公式：特征图大小 = ((输入大小-卷积核大小+2*填充值的大小)/步长大小) + 1
         self.c1 = nn.Conv2d(in_channels=3, out_channels=32, kernel_size=3, padding=1)
         # 第一个最大池化层，池化核为2，步长为2
-        # 计算公式：H = (输入大小-卷积核大小)/步长大小 + 1
+        # 计算公式：特征图大小 = (输入大小-卷积核大小)/步长大小 + 1
         self.s1 = nn.MaxPool2d(kernel_size=2, stride=1)
 
-        # 第二个卷积层，输入通道为32，输出为64，卷积核为3，步长为1，扩充边缘为2
+        # 第二个卷积层，输入通道为32，输出为64，卷积核为3，步长为1，扩充边缘为1
         self.c2 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, padding=1)
         # 第二个最大池化层，池化核为2，步长为2
         self.s2 = nn.MaxPool2d(kernel_size=2, stride=1)

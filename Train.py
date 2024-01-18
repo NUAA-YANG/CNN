@@ -33,7 +33,6 @@ train_transform = transforms.Compose([
 
 # 加载训练数据集
 # ImageFolder：假设所有的文件按文件夹保存，每个文件夹下存储同一个类别的图片，文件夹名为类名，其构造函数如下：
-# ImageFolder(root, transform=None, target_transform=None, loader=default_loader)
 # root：在root指定的路径下寻找图像，transform：对输入的图像进行的转换操作
 train_dataset = ImageFolder(ROOT_TRAIN, transform=train_transform)
 # batch_size=512表示每个batch加载多少个样本(默认: 1)
