@@ -21,7 +21,9 @@ def oneHotHandle():
     # handledFile = 'DataSet/NSL-KDD/KDDTrainHandled.cvs'    # 训练数据
     handledFile = 'DataSet/NSL-KDD/KDDTestHandled.cvs'     # 测试数据
     # 分别记录每个特征的最大值和最小值
-    minList = np.full(164,0)
+    # 本身只有43个特征值，包括存在四种字符型特征：3种协议+70个网络服务+11个连接状态+40种攻击
+    # 所以 43+3+70+11+40=167，但是还要减去替换的4种字符型特征，所以是167-4=163，但是图像一般是方阵，所以初始化双数，164个0
+    minList = np.full(164, 0)
     maxList = np.full(164, 0)
     with (open(sourceFile,'r')) as data_from,\
             (open(handledFile, 'w',newline='')) as data_to_flie:
@@ -34,14 +36,14 @@ def oneHotHandle():
 
             temp_line=np.array(line)
 
-            lenPro,resultPro = handleProtocol(line) #将源文件行中3种协议类型转换成数字标识
-            lenSer,resultSer = handleService(line) #将源文件行中70种网络服务类型转换成数字标识
-            lenFlag,resultFlag = handleFlag(line) #将源文件行中11种网络连接状态转换成数字标识
-            category,resultListLabel = handleLabel(line) #将源文件行中23种攻击类型转换成数字标识,同时记录类别
+            lenPro, resultPro = handleProtocol(line) #将源文件行中3种协议类型转换成数字标识
+            lenSer, resultSer = handleService(line) #将源文件行中70种网络服务类型转换成数字标识
+            lenFlag, resultFlag = handleFlag(line) #将源文件行中11种网络连接状态转换成数字标识
+            category, resultListLabel = handleLabel(line) #将源文件行中40种攻击类型转换成数字标识,同时记录类别
 
             # 分别插入对应的位置
-            temp_line = np.delete(temp_line,1)
-            temp_line = np.insert(temp_line, 1,resultPro)
+            temp_line = np.delete(temp_line, 1)
+            temp_line = np.insert(temp_line, 1, resultPro)
 
             indexSer = 1 + lenPro
             temp_line = np.delete(temp_line,indexSer)
@@ -147,9 +149,9 @@ def csvToImage():
                     print("处理完毕 %s 的 %s 张图片" % (name,count))
                 # 将CSV行数据转换为一维矩阵
                 rowData = [float(value) for value in line]
-                # 开方向上取整
+                # 开方向上取整，164向上取整开方是13
                 shape = math.ceil(math.sqrt(len(rowData)))
-                # 未满数据填充0
+                # 未满数据填充0，也就是将164填充为169
                 rowData = rowData + [0] * (shape*shape-len(rowData))
                 # 构建方阵，将列表转化为NumPy数组，并重塑为13x13的方阵
                 matrix = np.array(rowData).reshape(shape, shape)
